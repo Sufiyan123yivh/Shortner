@@ -3,421 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuickLink - URL Shortener</title>
+    <title>SafeLink - URL Shortener</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        .gradient-bg {
+        
+        .hero-gradient {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
         }
-        .copy-animation {
-            animation: copySuccess 0.3s ease-in-out;
-        }
-        @keyframes copySuccess {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="gradient-bg min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="text-center mb-12">
-            <h1 class="text-5xl font-bold text-white mb-4">QuickLink</h1>
-            <p class="text-xl text-white/80">Shorten your URLs instantly and share them anywhere</p>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center mr-3">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h1 class="text-xl font-bold text-gray-900">SafeLink</h1>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium">Sign In</button>
+                    <button class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-700">
+                        Get Started
+                    </button>
+                </div>
+            </div>
         </div>
+    </nav>
 
-        <!-- Main Card -->
-        <div class="max-w-2xl mx-auto glass-effect rounded-2xl p-8 shadow-2xl">
-            <div class="space-y-6">
-                <!-- URL Input -->
-                <div>
-                    <label for="longUrl" class="block text-white font-medium mb-2">Enter your long URL</label>
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-16">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                Shorten Your Links
+            </h1>
+            <p class="text-lg md:text-xl mb-8 text-purple-100">
+                Create short, secure links with detailed analytics. Fast, reliable, and easy to use.
+            </p>
+            
+            <!-- URL Shortener Form -->
+            <div class="bg-white rounded-xl p-6 shadow-lg max-w-2xl mx-auto">
+                <div class="flex flex-col md:flex-row gap-3">
                     <input 
                         type="url" 
-                        id="longUrl" 
-                        placeholder="https://example.com/very-long-url-that-needs-shortening"
-                        class="w-full px-4 py-3 rounded-lg border border-white/20 bg-white/10 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
+                        id="urlInput"
+                        placeholder="Enter your long URL here..."
+                        class="flex-1 px-4 py-3 text-gray-700 border border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
                     >
+                    <button 
+                        onclick="shortenUrl()"
+                        class="bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700"
+                    >
+                        Shorten
+                    </button>
                 </div>
-
-                <!-- Shorten Button -->
-                <button 
-                    onclick="shortenUrl()"
-                    class="w-full bg-white text-purple-600 font-semibold py-3 px-6 rounded-lg hover:bg-white/90 transition-all duration-200 transform hover:scale-105"
-                >
-                    Shorten URL
-                </button>
-
-                <!-- Result Section -->
-                <div id="resultSection" class="hidden space-y-4">
-                    <div class="border-t border-white/20 pt-6">
-                        <label class="block text-white font-medium mb-2">Your shortened URL</label>
-                        <div class="flex gap-2">
-                            <input 
-                                type="text" 
-                                id="shortUrl" 
-                                readonly
-                                class="flex-1 px-4 py-3 rounded-lg border border-white/20 bg-white/10 text-white focus:outline-none"
-                            >
+                
+                <!-- Result Area -->
+                <div id="resultArea" class="mt-4 hidden">
+                    <div class="bg-gray-50 rounded-lg p-4 border">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-sm text-gray-600 mb-1">Your short URL:</p>
+                                <p id="shortUrl" class="text-purple-600 font-mono break-all"></p>
+                            </div>
                             <button 
-                                onclick="copyToClipboard()"
-                                id="copyBtn"
-                                class="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-200 font-medium"
+                                onclick="copyUrl()"
+                                class="ml-3 bg-purple-100 text-purple-600 px-3 py-2 rounded hover:bg-purple-200 text-sm"
                             >
                                 Copy
                             </button>
                         </div>
                     </div>
-
-                    <!-- URL Stats -->
-                    <div class="grid grid-cols-2 gap-4 mt-4">
-                        <div class="text-center p-4 bg-white/10 rounded-lg">
-                            <div class="text-2xl font-bold text-white" id="clickCount">0</div>
-                            <div class="text-white/70 text-sm">Clicks</div>
-                        </div>
-                        <div class="text-center p-4 bg-white/10 rounded-lg">
-                            <div class="text-2xl font-bold text-white" id="createdDate">Today</div>
-                            <div class="text-white/70 text-sm">Created</div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Features Section -->
-        <div class="max-w-4xl mx-auto mt-16 grid md:grid-cols-3 gap-8">
-            <div class="text-center text-white">
-                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">Lightning Fast</h3>
-                <p class="text-white/80">Generate short URLs instantly with our optimized system</p>
+    <!-- Features Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Why Choose SafeLink?</h2>
+                <p class="text-gray-600">Simple, secure, and powerful link management</p>
             </div>
             
-            <div class="text-center text-white">
-                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Analytics</h3>
+                    <p class="text-gray-600">Track clicks and get detailed insights</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Secure</h3>
+                    <p class="text-gray-600">SSL encryption and malware protection</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Fast</h3>
+                    <p class="text-gray-600">Lightning-fast redirects worldwide</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <div class="flex items-center justify-center mb-4">
+                <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center mr-3">
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"/>
                     </svg>
                 </div>
-                <h3 class="text-xl font-semibold mb-2">Click Analytics</h3>
-                <p class="text-white/80">Track how many times your links are clicked</p>
+                <h3 class="text-xl font-bold">SafeLink</h3>
             </div>
-            
-            <div class="text-center text-white">
-                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">Secure & Reliable</h3>
-                <p class="text-white/80">Your links are safe and will work whenever you need them</p>
-            </div>
+            <p class="text-gray-400 mb-4">The simple and secure URL shortener</p>
+            <p class="text-gray-500 text-sm">&copy; 2024 SafeLink. All rights reserved.</p>
         </div>
-
-        <!-- Setup Instructions -->
-        <div class="max-w-2xl mx-auto mt-16">
-            <div class="glass-effect rounded-2xl p-8">
-                <h3 class="text-2xl font-bold text-white mb-6">✅ Ready to Use!</h3>
-                <div class="space-y-4 text-white/80">
-                    <p class="text-sm">Your shortened URLs are ready to use! They already point to your redirect.html page with the encoded original URL.</p>
-                    <div class="bg-black/30 rounded-lg p-4 font-mono text-sm">
-                        <div class="text-green-400"># URL Format:</div>
-                        <div class="text-white/60 mt-2" id="redirectRules">
-                            # No redirect rules needed - URLs are already in the correct format
-                        </div>
-                    </div>
-                    <p class="text-xs text-white/60">💡 Click "Copy Original" next to any shortened URL to get the original destination URL</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Recent Links -->
-        <div class="max-w-2xl mx-auto mt-8">
-            <div class="glass-effect rounded-2xl p-8">
-                <h3 class="text-2xl font-bold text-white mb-6">Recent Links</h3>
-                <div id="recentLinks" class="space-y-3">
-                    <div class="text-white/60 text-center py-8">
-                        No links created yet. Shorten your first URL above!
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    </footer>
 
     <script>
-        let linkHistory = [];
-        let linkStats = {};
-
         function shortenUrl() {
-            const longUrl = document.getElementById('longUrl').value.trim();
+            const urlInput = document.getElementById('urlInput');
+            const resultArea = document.getElementById('resultArea');
+            const shortUrlElement = document.getElementById('shortUrl');
             
-            if (!longUrl) {
+            const inputUrl = urlInput.value.trim();
+            
+            if (!inputUrl) {
                 alert('Please enter a URL to shorten');
                 return;
             }
-
-            if (!isValidUrl(longUrl)) {
-                alert('Please enter a valid URL (must start with http:// or https://)');
+            
+            if (!isValidUrl(inputUrl)) {
+                alert('Please enter a valid URL (include http:// or https://)');
                 return;
             }
-
+            
             // Generate a random short code
             const shortCode = generateShortCode();
-            const shortUrl = `https://shortner-ake.pages.dev/redirect.html?url=${encodeURIComponent(longUrl)}`;
+            const shortUrl = `https://shortner-ake.pages.dev/${shortCode}`;
             
-            // Store the mapping
-            const linkData = {
-                original: longUrl,
-                short: shortUrl,
-                code: shortCode,
-                created: new Date().toLocaleDateString(),
-                clicks: 0
-            };
+            // Show result
+            shortUrlElement.textContent = shortUrl;
+            resultArea.classList.remove('hidden');
+            resultArea.classList.add('fade-in');
             
-            linkHistory.unshift(linkData);
-            linkStats[shortCode] = linkData;
+            // Store the mapping with redirect.html
+            localStorage.setItem(shortCode, inputUrl);
             
-            // Display result
-            document.getElementById('shortUrl').value = shortUrl;
-            document.getElementById('clickCount').textContent = '0';
-            document.getElementById('createdDate').textContent = linkData.created;
-            document.getElementById('resultSection').classList.remove('hidden');
-            
-            // Update recent links
-            updateRecentLinks();
-            
-            // Update redirect rules display
-            updateRedirectRules();
-            
-            // Clear input
-            document.getElementById('longUrl').value = '';
+            // Make the short URL clickable and redirect to redirect.html
+            shortUrlElement.innerHTML = `<a href="redirect.html?code=${shortCode}&url=${encodeURIComponent(inputUrl)}" target="_blank" class="hover:underline">${shortUrl}</a>`;
         }
-
+        
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+        
         function generateShortCode() {
-            const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             let result = '';
             for (let i = 0; i < 6; i++) {
                 result += chars.charAt(Math.floor(Math.random() * chars.length));
             }
             return result;
         }
-
-        function isValidUrl(string) {
-            try {
-                new URL(string);
-                return string.startsWith('http://') || string.startsWith('https://');
-            } catch (_) {
-                return false;
-            }
-        }
-
-        function copyToClipboard() {
-            const shortUrl = document.getElementById('shortUrl');
-            shortUrl.select();
-            shortUrl.setSelectionRange(0, 99999);
-            
-            navigator.clipboard.writeText(shortUrl.value).then(() => {
-                const copyBtn = document.getElementById('copyBtn');
-                const originalText = copyBtn.textContent;
-                
-                copyBtn.textContent = 'Copied!';
-                copyBtn.classList.add('copy-animation');
-                copyBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
-                copyBtn.classList.add('bg-blue-500');
+        
+        function copyUrl() {
+            const shortUrl = document.getElementById('shortUrl').textContent;
+            navigator.clipboard.writeText(shortUrl).then(() => {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('bg-green-100', 'text-green-600');
+                button.classList.remove('bg-purple-100', 'text-purple-600');
                 
                 setTimeout(() => {
-                    copyBtn.textContent = originalText;
-                    copyBtn.classList.remove('copy-animation', 'bg-blue-500');
-                    copyBtn.classList.add('bg-green-500', 'hover:bg-green-600');
+                    button.textContent = originalText;
+                    button.classList.remove('bg-green-100', 'text-green-600');
+                    button.classList.add('bg-purple-100', 'text-purple-600');
                 }, 2000);
             });
         }
-
-        function updateRecentLinks() {
-            const recentLinksContainer = document.getElementById('recentLinks');
-            
-            if (linkHistory.length === 0) {
-                recentLinksContainer.innerHTML = `
-                    <div class="text-white/60 text-center py-8">
-                        No links created yet. Shorten your first URL above!
-                    </div>
-                `;
-                return;
-            }
-            
-            const recentLinksHtml = linkHistory.slice(0, 5).map(link => `
-                <div class="flex items-center justify-between p-4 bg-white/10 rounded-lg">
-                    <div class="flex-1 min-w-0">
-                        <div class="text-white font-medium truncate">${link.short}</div>
-                        <div class="text-white/60 text-sm truncate">${link.original}</div>
-                    </div>
-                    <div class="flex items-center gap-4 ml-4">
-                        <div class="text-center">
-                            <div class="text-white font-semibold">${link.clicks}</div>
-                            <div class="text-white/60 text-xs">clicks</div>
-                        </div>
-                        <button 
-                            onclick="copyLink('${link.short}')"
-                            class="px-3 py-1 bg-white/20 text-white rounded hover:bg-white/30 transition-colors text-sm"
-                        >
-                            Copy
-                        </button>
-                        <button 
-                            onclick="openShortLink('${link.code}')"
-                            class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors text-sm"
-                        >
-                            Visit
-                        </button>
-                        <button 
-                            onclick="copyRedirectRule('${link.code}', '${link.original}')"
-                            class="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors text-sm"
-                        >
-                            Copy Original
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-            
-            recentLinksContainer.innerHTML = recentLinksHtml;
-        }
-
-        function copyLink(url) {
-            navigator.clipboard.writeText(url).then(() => {
-                // Simple feedback - could enhance this
-                const event = new CustomEvent('linkCopied');
-                document.dispatchEvent(event);
-            });
-        }
-
-        function copyRedirectRule(shortCode, originalUrl) {
-            const rule = `# No redirect rule needed - URL is already in the correct format`;
-            
-            navigator.clipboard.writeText(originalUrl).then(() => {
-                // Show success message
-                const event = new Event('ruleCopied');
-                document.dispatchEvent(event);
-                
-                // Simple alert for now
-                alert('Original URL copied to clipboard:\n\n' + originalUrl);
-            });
-        }
-
-        function updateRedirectRules() {
-            const redirectRulesContainer = document.getElementById('redirectRules');
-            
-            if (linkHistory.length === 0) {
-                redirectRulesContainer.innerHTML = '# No redirect rules needed - URLs are already in the correct format';
-                return;
-            }
-            
-            redirectRulesContainer.innerHTML = '# No redirect rules needed - URLs are already in the correct format\n# Your shortened URLs already point to redirect.html';
-        }
-
-        // Allow Enter key to submit
-        document.getElementById('longUrl').addEventListener('keypress', function(e) {
+        
+        // Handle Enter key
+        document.getElementById('urlInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 shortenUrl();
             }
         });
-
-        // Simulate click tracking (in a real app, this would happen on the server)
-        function simulateClick(shortCode) {
-            if (linkStats[shortCode]) {
-                linkStats[shortCode].clicks++;
-                updateRecentLinks();
-            }
-        }
-
-        function openShortLink(shortCode) {
-            if (linkStats[shortCode]) {
-                simulateClick(shortCode);
-                // Redirect to redirect.html with the original URL as parameter
-                const originalUrl = encodeURIComponent(linkStats[shortCode].original);
-                window.open(`https://shortner-ake.pages.dev/redirect.html?url=${originalUrl}`, '_blank');
-            }
-        }
-
-        function showRedirectPages(originalUrl) {
-            // Hide main content
-            document.body.innerHTML = `
-                <div class="gradient-bg min-h-screen flex items-center justify-center">
-                    <div class="max-w-md mx-auto glass-effect rounded-2xl p-8 shadow-2xl text-center">
-                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <svg class="w-8 h-8 text-white animate-spin" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </div>
-                        <h2 class="text-2xl font-bold text-white mb-4">Preparing your link...</h2>
-                        <p class="text-white/80 mb-6">Please wait while we verify the destination</p>
-                        <div class="w-full bg-white/20 rounded-full h-2">
-                            <div id="progressBar1" class="bg-white h-2 rounded-full transition-all duration-1000" style="width: 0%"></div>
-                        </div>
-                        <p class="text-white/60 text-sm mt-4">Step 1 of 2</p>
-                    </div>
-                </div>
-            `;
-
-            // Start progress bar
-            setTimeout(() => {
-                document.getElementById('progressBar1').style.width = '100%';
-            }, 100);
-
-            // Show second page after 3 seconds
-            setTimeout(() => {
-                showSecondPage(originalUrl);
-            }, 3000);
-        }
-
-        function showSecondPage(originalUrl) {
-            document.body.innerHTML = `
-                <div class="gradient-bg min-h-screen flex items-center justify-center">
-                    <div class="max-w-md mx-auto glass-effect rounded-2xl p-8 shadow-2xl text-center">
-                        <div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <svg class="w-8 h-8 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                        <h2 class="text-2xl font-bold text-white mb-4">Link Verified!</h2>
-                        <p class="text-white/80 mb-6">Redirecting you to your destination...</p>
-                        <div class="bg-white/10 rounded-lg p-4 mb-6">
-                            <p class="text-white/60 text-sm mb-2">You will be redirected to:</p>
-                            <p class="text-white font-medium break-all">${originalUrl}</p>
-                        </div>
-                        <div class="w-full bg-white/20 rounded-full h-2">
-                            <div id="progressBar2" class="bg-green-400 h-2 rounded-full transition-all duration-2000" style="width: 0%"></div>
-                        </div>
-                        <p class="text-white/60 text-sm mt-4">Step 2 of 2</p>
-                        <button onclick="window.open('${originalUrl}', '_blank')" class="mt-6 px-6 py-2 bg-white text-purple-600 rounded-lg hover:bg-white/90 transition-colors font-medium">
-                            Continue Now
-                        </button>
-                    </div>
-                </div>
-            `;
-
-            // Start second progress bar
-            setTimeout(() => {
-                document.getElementById('progressBar2').style.width = '100%';
-            }, 100);
-
-            // Redirect after 5 seconds
-            setTimeout(() => {
-                window.open(originalUrl, '_blank');
-                // Go back to main page
-                location.reload();
-            }, 5000);
-        }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'970994a4b44d794a',t:'MTc1NTQzNzk5OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'970a9535e7077a24',t:'MTc1NTQ0ODUwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
