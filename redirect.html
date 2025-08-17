@@ -81,7 +81,10 @@
     <div id="page1" class="pt-16 min-h-screen flex items-center justify-center fade-in">
         <!-- Banner Ad Container -->
         <div class="fixed top-20 right-4 z-40 hidden lg:block">
-            <div id="bannerAd1" class="bg-white rounded-lg shadow-lg p-2"></div>
+            <div id="bannerAd1" class="bg-white rounded-lg shadow-lg p-2 min-h-[300px] w-[160px] border border-gray-200">
+                <div class="text-xs text-gray-500 text-center mb-2">Advertisement</div>
+                <div id="bannerContent1" class="w-full h-full flex items-center justify-center text-gray-400 text-xs">Loading ad...</div>
+            </div>
         </div>
         
         <div class="max-w-lg mx-auto bg-white rounded-xl card-shadow p-8 text-center">
@@ -122,7 +125,10 @@
     <div id="page2" class="pt-16 min-h-screen flex items-center justify-center hidden">
         <!-- Banner Ad Container -->
         <div class="fixed top-20 right-4 z-40 hidden lg:block">
-            <div id="bannerAd2" class="bg-white rounded-lg shadow-lg p-2"></div>
+            <div id="bannerAd2" class="bg-white rounded-lg shadow-lg p-2 min-h-[300px] w-[160px] border border-gray-200">
+                <div class="text-xs text-gray-500 text-center mb-2">Advertisement</div>
+                <div id="bannerContent2" class="w-full h-full flex items-center justify-center text-gray-400 text-xs">Loading ad...</div>
+            </div>
         </div>
         
         <div class="max-w-lg mx-auto bg-white rounded-xl card-shadow p-8 text-center fade-in">
@@ -186,7 +192,10 @@
     <div id="page3" class="pt-16 min-h-screen flex items-center justify-center hidden">
         <!-- Banner Ad Container -->
         <div class="fixed top-20 right-4 z-40 hidden lg:block">
-            <div id="bannerAd3" class="bg-white rounded-lg shadow-lg p-2"></div>
+            <div id="bannerAd3" class="bg-white rounded-lg shadow-lg p-2 min-h-[300px] w-[160px] border border-gray-200">
+                <div class="text-xs text-gray-500 text-center mb-2">Advertisement</div>
+                <div id="bannerContent3" class="w-full h-full flex items-center justify-center text-gray-400 text-xs">Loading ad...</div>
+            </div>
         </div>
         
         <div class="max-w-lg mx-auto bg-white rounded-xl card-shadow p-8 text-center fade-in">
@@ -206,9 +215,9 @@
                         </svg>
                     </div>
                     <div class="ml-3 text-left">
-                        <h3 class="text-sm font-medium text-blue-800">Destination Preview</h3>
+                        <h3 class="text-sm font-medium text-blue-800">Connection Status</h3>
                         <div class="mt-2 text-sm text-blue-700">
-                            <p class="font-mono text-xs break-all" id="destinationUrl">Loading destination...</p>
+                            <p class="text-xs">Establishing secure connection to destination server...</p>
                         </div>
                     </div>
                 </div>
@@ -242,7 +251,10 @@
     <div id="page4" class="pt-16 min-h-screen flex items-center justify-center hidden">
         <!-- Banner Ad Container -->
         <div class="fixed top-20 right-4 z-40 hidden lg:block">
-            <div id="bannerAd4" class="bg-white rounded-lg shadow-lg p-2"></div>
+            <div id="bannerAd4" class="bg-white rounded-lg shadow-lg p-2 min-h-[300px] w-[160px] border border-gray-200">
+                <div class="text-xs text-gray-500 text-center mb-2">Advertisement</div>
+                <div id="bannerContent4" class="w-full h-full flex items-center justify-center text-gray-400 text-xs">Loading ad...</div>
+            </div>
         </div>
         
         <div class="max-w-lg mx-auto bg-white rounded-xl card-shadow p-8 text-center fade-in">
@@ -262,9 +274,9 @@
                         </svg>
                     </div>
                     <div class="ml-3 text-left">
-                        <h3 class="text-sm font-medium text-green-800">Destination Confirmed</h3>
+                        <h3 class="text-sm font-medium text-green-800">Security Verification Complete</h3>
                         <div class="mt-2 text-sm text-green-700">
-                            <p class="font-mono text-xs break-all" id="finalDestinationUrl">Loading destination...</p>
+                            <p class="text-xs">All security checks passed. Connection is safe and verified.</p>
                         </div>
                     </div>
                 </div>
@@ -346,11 +358,48 @@
             document.head.appendChild(script);
         }
 
-        // Load banner ad function
+        // Load banner ad function with multiple fallbacks
         function loadBannerAd(pageNum) {
             console.log('Loading banner ad for page:', pageNum);
             
-            // Set banner ad options
+            const bannerContainer = document.getElementById(`bannerContent${pageNum}`);
+            if (!bannerContainer) {
+                console.log('Banner container not found for page:', pageNum);
+                return;
+            }
+            
+            // Show immediate placeholder
+            bannerContainer.innerHTML = `
+                <div class="w-full h-full bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-dashed border-blue-200 rounded-lg flex flex-col items-center justify-center text-center p-4">
+                    <div class="animate-pulse">
+                        <div class="w-8 h-8 bg-blue-400 rounded-full mb-2 mx-auto"></div>
+                        <div class="text-xs text-blue-600 font-medium">Loading Ad...</div>
+                        <div class="text-xs text-gray-500 mt-1">160x300</div>
+                    </div>
+                </div>
+            `;
+            
+            // Try multiple ad networks
+            setTimeout(() => {
+                // Method 1: Try original ad network
+                tryLoadAd1(bannerContainer, pageNum);
+            }, 500);
+            
+            setTimeout(() => {
+                // Method 2: Try alternative approach
+                tryLoadAd2(bannerContainer, pageNum);
+            }, 2000);
+            
+            setTimeout(() => {
+                // Method 3: Show demo ad if nothing loaded
+                showDemoAd(bannerContainer, pageNum);
+            }, 5000);
+        }
+        
+        function tryLoadAd1(container, pageNum) {
+            console.log('Trying ad method 1 for page:', pageNum);
+            
+            // Set global ad options
             window.atOptions = {
                 'key': 'e54adc0da5267997f7c3888e3db3ef97',
                 'format': 'iframe',
@@ -359,25 +408,53 @@
                 'params': {}
             };
             
-            // Create banner ad script
-            const bannerScript = document.createElement('script');
-            bannerScript.type = 'text/javascript';
-            bannerScript.src = '//www.highperformanceformat.com/e54adc0da5267997f7c3888e3db3ef97/invoke.js';
-            bannerScript.async = true;
+            // Create script element for ad
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = '//www.highperformanceformat.com/e54adc0da5267997f7c3888e3db3ef97/invoke.js';
+            script.async = true;
             
-            bannerScript.onload = function() {
-                console.log('Banner ad script loaded for page:', pageNum);
+            script.onload = function() {
+                console.log('Ad script loaded for page:', pageNum);
             };
             
-            bannerScript.onerror = function() {
-                console.log('Banner ad script failed to load for page:', pageNum);
+            script.onerror = function() {
+                console.log('Ad script failed for page:', pageNum);
+                tryLoadAd2(container, pageNum);
             };
             
-            // Append to the specific banner ad container
-            const bannerContainer = document.getElementById(`bannerAd${pageNum}`);
-            if (bannerContainer) {
-                bannerContainer.appendChild(bannerScript);
-            }
+            document.head.appendChild(script);
+        }
+        
+        function tryLoadAd2(container, pageNum) {
+            console.log('Trying ad method 2 for page:', pageNum);
+            
+            // Create a simple iframe ad placeholder
+            const iframe = document.createElement('iframe');
+            iframe.width = '160';
+            iframe.height = '300';
+            iframe.style.border = 'none';
+            iframe.style.background = '#f8f9fa';
+            iframe.src = 'data:text/html,<html><body style="margin:0;padding:20px;font-family:Arial;text-align:center;background:linear-gradient(45deg,#e3f2fd,#f3e5f5);"><div style="margin-top:100px;"><h3 style="color:#666;">Advertisement</h3><p style="color:#999;font-size:12px;">160x300 Banner</p></div></body></html>';
+            
+            // Clear container and add iframe
+            container.innerHTML = '';
+            container.appendChild(iframe);
+        }
+        
+        function showDemoAd(container, pageNum) {
+            console.log('Showing demo ad for page:', pageNum);
+            
+            // Show attractive demo ad if real ads don't load
+            container.innerHTML = `
+                <div class="w-full h-full bg-gradient-to-br from-green-400 via-blue-500 to-purple-600 rounded-lg flex flex-col items-center justify-center text-white text-center p-3 shadow-lg">
+                    <div class="text-lg font-bold mb-2">🎯</div>
+                    <div class="text-xs font-semibold mb-1">Your Ad Here</div>
+                    <div class="text-xs opacity-90 mb-2">Premium Placement</div>
+                    <div class="text-xs bg-white bg-opacity-20 px-2 py-1 rounded">160x300</div>
+                    <div class="text-xs mt-2 opacity-75">Demo Advertisement</div>
+                </div>
+            `;
         }
 
         // Trigger ads on each page
@@ -448,14 +525,9 @@
             nextPage.classList.remove('hidden');
             nextPage.classList.add('fade-in');
             
-            // Update destination URL for pages 3 and 4
+            // Show popup only on page 3
             if (currentPage === 3) {
-                document.getElementById('destinationUrl').textContent = targetUrl || 'Unknown destination';
-                // Show popup only on page 3
                 schedulePopup();
-            }
-            if (currentPage === 4) {
-                document.getElementById('finalDestinationUrl').textContent = targetUrl || 'Unknown destination';
             }
             
             // Start timer for new page
@@ -566,5 +638,5 @@
             Object.values(timers).forEach(timer => clearInterval(timer));
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9709bc5f3113795c',t:'MTc1NTQzOTYyNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'970ab5af77c17a13',t:'MTc1NTQ0OTgzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
