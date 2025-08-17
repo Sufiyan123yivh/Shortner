@@ -157,7 +157,7 @@
 
             // Generate a random short code
             const shortCode = generateShortCode();
-            const shortUrl = `https://qlink.co/${shortCode}`;
+            const shortUrl = `https://shortner-ake.pages.dev/${shortCode}`;
             
             // Store the mapping
             const linkData = {
@@ -292,7 +292,9 @@
         function openShortLink(shortCode) {
             if (linkStats[shortCode]) {
                 simulateClick(shortCode);
-                showRedirectPages(linkStats[shortCode].original);
+                // Redirect to redirect.html with the original URL as parameter
+                const originalUrl = encodeURIComponent(linkStats[shortCode].original);
+                window.open(`https://shortner-ake.pages.dev/redirect.html?url=${originalUrl}`, '_blank');
             }
         }
 
@@ -367,5 +369,5 @@
             }, 5000);
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9709733e61b77a19',t:'MTc1NTQzNjYzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9709865700bd7a07',t:'MTc1NTQzNzQxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
