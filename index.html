@@ -125,8 +125,25 @@
             </div>
         </div>
 
-        <!-- Recent Links -->
+        <!-- Setup Instructions -->
         <div class="max-w-2xl mx-auto mt-16">
+            <div class="glass-effect rounded-2xl p-8">
+                <h3 class="text-2xl font-bold text-white mb-6">✅ Ready to Use!</h3>
+                <div class="space-y-4 text-white/80">
+                    <p class="text-sm">Your shortened URLs are ready to use! They already point to your redirect.html page with the encoded original URL.</p>
+                    <div class="bg-black/30 rounded-lg p-4 font-mono text-sm">
+                        <div class="text-green-400"># URL Format:</div>
+                        <div class="text-white/60 mt-2" id="redirectRules">
+                            # No redirect rules needed - URLs are already in the correct format
+                        </div>
+                    </div>
+                    <p class="text-xs text-white/60">💡 Click "Copy Original" next to any shortened URL to get the original destination URL</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Links -->
+        <div class="max-w-2xl mx-auto mt-8">
             <div class="glass-effect rounded-2xl p-8">
                 <h3 class="text-2xl font-bold text-white mb-6">Recent Links</h3>
                 <div id="recentLinks" class="space-y-3">
@@ -157,7 +174,7 @@
 
             // Generate a random short code
             const shortCode = generateShortCode();
-            const shortUrl = `https://shortner-ake.pages.dev/${shortCode}`;
+            const shortUrl = `https://shortner-ake.pages.dev/redirect.html?url=${encodeURIComponent(longUrl)}`;
             
             // Store the mapping
             const linkData = {
@@ -179,6 +196,9 @@
             
             // Update recent links
             updateRecentLinks();
+            
+            // Update redirect rules display
+            updateRedirectRules();
             
             // Clear input
             document.getElementById('longUrl').value = '';
@@ -259,6 +279,12 @@
                         >
                             Visit
                         </button>
+                        <button 
+                            onclick="copyRedirectRule('${link.code}', '${link.original}')"
+                            class="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors text-sm"
+                        >
+                            Copy Original
+                        </button>
                     </div>
                 </div>
             `).join('');
@@ -272,6 +298,30 @@
                 const event = new CustomEvent('linkCopied');
                 document.dispatchEvent(event);
             });
+        }
+
+        function copyRedirectRule(shortCode, originalUrl) {
+            const rule = `# No redirect rule needed - URL is already in the correct format`;
+            
+            navigator.clipboard.writeText(originalUrl).then(() => {
+                // Show success message
+                const event = new Event('ruleCopied');
+                document.dispatchEvent(event);
+                
+                // Simple alert for now
+                alert('Original URL copied to clipboard:\n\n' + originalUrl);
+            });
+        }
+
+        function updateRedirectRules() {
+            const redirectRulesContainer = document.getElementById('redirectRules');
+            
+            if (linkHistory.length === 0) {
+                redirectRulesContainer.innerHTML = '# No redirect rules needed - URLs are already in the correct format';
+                return;
+            }
+            
+            redirectRulesContainer.innerHTML = '# No redirect rules needed - URLs are already in the correct format\n# Your shortened URLs already point to redirect.html';
         }
 
         // Allow Enter key to submit
@@ -369,5 +419,5 @@
             }, 5000);
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9709865700bd7a07',t:'MTc1NTQzNzQxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'970994a4b44d794a',t:'MTc1NTQzNzk5OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
