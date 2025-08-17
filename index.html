@@ -176,14 +176,18 @@
                 return { '+': '-', '/': '_', '=': '' }[match];
             });
             
-            // Create short URL with encoded string
+            // Create short URL for display
             const shortUrl = `https://shortner-ake.pages.dev/${encoded}`;
             
-            // Create the actual working redirect URL
-            const redirectUrl = `https://shortner-ake.pages.dev/redirect.html?url=${encodeURIComponent(inputUrl)}`;
+            // Create the actual working redirect URL that will function immediately
+            const actualWorkingUrl = `https://shortner-ake.pages.dev/redirect.html?code=${encoded}&url=${encodeURIComponent(inputUrl)}`;
             
-            // Show result - display the short URL but link to redirect.html
-            shortUrlElement.innerHTML = `<a href="${redirectUrl}" target="_blank" class="hover:underline">${shortUrl}</a>`;
+            // Show result - display the short URL but make it actually work
+            shortUrlElement.innerHTML = `<a href="${actualWorkingUrl}" class="hover:underline">${shortUrl}</a>`;
+            
+            // Store the encoded URL for copying (this will be the working link)
+            shortUrlElement.setAttribute('data-copy-url', actualWorkingUrl);
+            
             resultArea.classList.remove('hidden');
             resultArea.classList.add('fade-in');
         }
@@ -207,9 +211,11 @@
         }
         
         function copyUrl() {
-            // Copy the display URL (short version)
-            const shortUrlText = document.getElementById('shortUrl').textContent;
-            navigator.clipboard.writeText(shortUrlText).then(() => {
+            // Copy the actual working URL
+            const shortUrlElement = document.getElementById('shortUrl');
+            const urlToCopy = shortUrlElement.getAttribute('data-copy-url') || shortUrlElement.textContent;
+            
+            navigator.clipboard.writeText(urlToCopy).then(() => {
                 const button = event.target;
                 const originalText = button.textContent;
                 button.textContent = 'Copied!';
@@ -231,5 +237,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'970aa45c14b27a1f',t:'MTc1NTQ0OTEyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'970aa830a7eb7a0d',t:'MTc1NTQ0OTI4NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
