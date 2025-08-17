@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting - QuickLink</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <!-- Page 1: Preparing Link -->
+    <div id="page1" class="min-h-screen flex items-center justify-center">
+        <div class="max-w-md mx-auto glass-effect rounded-2xl p-8 shadow-2xl text-center">
+            <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10 text-white animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold text-white mb-4">Preparing your link...</h1>
+            <p class="text-white/80 mb-8">Please wait while we verify the destination</p>
+            
+            <!-- Progress Bar -->
+            <div class="w-full bg-white/20 rounded-full h-3 mb-6">
+                <div id="progressBar1" class="bg-white h-3 rounded-full transition-all duration-3000 ease-out" style="width: 0%"></div>
+            </div>
+            
+            <!-- Step Indicator -->
+            <div class="flex items-center justify-center space-x-2 mb-4">
+                <div class="w-3 h-3 bg-white rounded-full"></div>
+                <div class="w-3 h-3 bg-white/30 rounded-full"></div>
+            </div>
+            <p class="text-white/60 text-sm">Step 1 of 2</p>
+            
+            <!-- Security Icons -->
+            <div class="flex justify-center space-x-4 mt-8">
+                <div class="flex items-center space-x-2 text-white/60">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="text-xs">Secure</span>
+                </div>
+                <div class="flex items-center space-x-2 text-white/60">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="text-xs">Verified</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2: Link Verified (Hidden initially) -->
+    <div id="page2" class="min-h-screen flex items-center justify-center hidden">
+        <div class="max-w-lg mx-auto glass-effect rounded-2xl p-8 shadow-2xl text-center">
+            <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold text-white mb-4">Link Verified!</h1>
+            <p class="text-white/80 mb-6">Redirecting you to your destination...</p>
+            
+            <!-- Destination URL Display -->
+            <div class="bg-white/10 rounded-lg p-4 mb-6 border border-white/20">
+                <p class="text-white/60 text-sm mb-2">You will be redirected to:</p>
+                <p id="destinationUrl" class="text-white font-medium break-all text-sm"></p>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="w-full bg-white/20 rounded-full h-3 mb-6">
+                <div id="progressBar2" class="bg-green-400 h-3 rounded-full transition-all duration-5000 ease-out" style="width: 0%"></div>
+            </div>
+            
+            <!-- Step Indicator -->
+            <div class="flex items-center justify-center space-x-2 mb-4">
+                <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                <div class="w-3 h-3 bg-white rounded-full"></div>
+            </div>
+            <p class="text-white/60 text-sm mb-6">Step 2 of 2</p>
+            
+            <!-- Continue Button -->
+            <button id="continueBtn" onclick="redirectNow()" class="px-8 py-3 bg-white text-purple-600 rounded-lg hover:bg-white/90 transition-all duration-200 transform hover:scale-105 font-semibold shadow-lg">
+                Continue Now
+            </button>
+            
+            <!-- Countdown -->
+            <p class="text-white/60 text-sm mt-4">
+                Auto-redirect in <span id="countdown" class="font-semibold text-white">5</span> seconds
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let destinationUrl = '';
+        let countdownTimer;
+        let countdownValue = 5;
+
+        // Get URL parameters
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Initialize redirect process
+        function initRedirect() {
+            // Get destination URL from query parameter
+            destinationUrl = getUrlParameter('url') || getUrlParameter('redirect') || 'https://example.com';
+            
+            // Decode URL if it's encoded
+            try {
+                destinationUrl = decodeURIComponent(destinationUrl);
+            } catch (e) {
+                console.log('URL decode error:', e);
+            }
+
+            // Validate URL
+            if (!isValidUrl(destinationUrl)) {
+                destinationUrl = 'https://example.com';
+            }
+
+            // Start first page animation
+            setTimeout(() => {
+                document.getElementById('progressBar1').style.width = '100%';
+            }, 500);
+
+            // Show second page after 3 seconds
+            setTimeout(() => {
+                showSecondPage();
+            }, 3500);
+        }
+
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return string.startsWith('http://') || string.startsWith('https://');
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function showSecondPage() {
+            // Hide first page and show second page
+            document.getElementById('page1').classList.add('hidden');
+            document.getElementById('page2').classList.remove('hidden');
+            
+            // Set destination URL
+            document.getElementById('destinationUrl').textContent = destinationUrl;
+            
+            // Start second progress bar
+            setTimeout(() => {
+                document.getElementById('progressBar2').style.width = '100%';
+            }, 200);
+            
+            // Start countdown
+            startCountdown();
+            
+            // Auto redirect after 5 seconds
+            setTimeout(() => {
+                redirectNow();
+            }, 5000);
+        }
+
+        function startCountdown() {
+            countdownTimer = setInterval(() => {
+                countdownValue--;
+                document.getElementById('countdown').textContent = countdownValue;
+                
+                if (countdownValue <= 0) {
+                    clearInterval(countdownTimer);
+                }
+            }, 1000);
+        }
+
+        function redirectNow() {
+            if (countdownTimer) {
+                clearInterval(countdownTimer);
+            }
+            
+            // Add click animation to button
+            const btn = document.getElementById('continueBtn');
+            btn.textContent = 'Redirecting...';
+            btn.classList.add('opacity-75');
+            
+            // Redirect to destination
+            setTimeout(() => {
+                window.location.href = destinationUrl;
+            }, 500);
+        }
+
+        // Handle back button
+        window.addEventListener('popstate', function(event) {
+            // Redirect to main site if user goes back
+            window.location.href = 'https://shortner-ake.pages.dev/';
+        });
+
+        // Initialize when page loads
+        window.addEventListener('load', initRedirect);
+
+        // Fallback initialization
+        document.addEventListener('DOMContentLoaded', initRedirect);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97097dc7d7b07a12',t:'MTc1NTQzNzA2Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
